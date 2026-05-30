@@ -1,0 +1,43 @@
+name: Build Frontend and Prepare Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout code
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # 2. Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # 3. Install frontend deps
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install
+
+      # 4. Build frontend
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      # 5. Copy build to backend/public
+      - name: Copy build to backend
+        run: |
+          rm -rf backend/public
+          mkdir backend/public
+          cp -r frontend/dist/* backend/public 2>/dev/null || cp -r frontend/build/* backend/public
+
+      # 6. Install backend dependencies (optional check)
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm install

@@ -20,24 +20,24 @@ jobs:
         with:
           node-version: 18
 
-      # 3. Install frontend deps
+      # 3. Install frontend dependencies
       - name: Install frontend dependencies
-        working-directory: frontend
+        working-directory: Frontend
         run: npm install
 
       # 4. Build frontend
       - name: Build frontend
-        working-directory: frontend
+        working-directory: Frontend
         run: npm run build
 
       # 5. Copy build to backend/public
       - name: Copy build to backend
         run: |
-          rm -rf backend/public
-          mkdir backend/public
-          cp -r frontend/dist/* backend/public 2>/dev/null || cp -r frontend/build/* backend/public
+          rm -rf Backend/public
+          mkdir -p Backend/public
+          cp -r Frontend/dist/* Backend/public 2>/dev/null || cp -r Frontend/build/* Backend/public
 
-      # 6. Install backend dependencies (optional check)
+      # 6. Install backend dependencies
       - name: Install backend dependencies
-        working-directory: backend
+        working-directory: Backend
         run: npm install
